@@ -1,12 +1,16 @@
 const blogs = require('../Models/Blogs/Blog');
 // create blogs 
 function allBlogs(app) {
+     // search data 
+        
+        
 app.post("/createblog",async(req,res)=>{
      try {
        const CreateNewBlog=new blogs({
             title:req.body.title,
             image:req.body.image,
             authorName:req.body.authorName,
+            authorEmail:req.body.authorEmail,
             status:req.body.status,
             date:req.body.date,
             keywords:req.body.keywords,
@@ -39,6 +43,22 @@ app.get("/readblogswithcategory/:category",async(req,res)=>{
      try {
           const category=req.params.category;
           const readBlogs=await blogs.find({category:category});
+          if(readBlogs){
+               res.status(200).send(readBlogs)
+          }else{
+               res.status(404).send({
+                    message:"Blogs is not found"
+               })
+          }
+     } catch (error) {
+          res.status(500).send({message:error.message})
+     }
+})
+  //   read blogs with category 
+app.get("/readblogswithemail/:authorEmail",async(req,res)=>{
+     try {
+          const findauthordata=req.params.authorEmail;
+          const readBlogs=await blogs.find({authorEmail:findauthordata});
           if(readBlogs){
                res.status(200).send(readBlogs)
           }else{

@@ -30,6 +30,9 @@ usermessage(app);
 // user Contact crud operation start  
 const allAuthors = require('./Src/Routes/Authors');
 allAuthors(app);
+// user update operation start  
+const allUsers = require('./Src/Routes/allUsers');
+allUsers(app);
 // Faq crud operation start  
 const allFaqs = require('./Src/Routes/FAQ');
 allFaqs(app);

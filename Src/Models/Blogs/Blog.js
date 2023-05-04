@@ -20,7 +20,8 @@ const mongoose = require('mongoose');
          type: String
        },
        authorEmail: {
-         type: String
+         type: String,
+         required: [true, "Post authorEmail is required"],
        },
        status: {
          type: String
