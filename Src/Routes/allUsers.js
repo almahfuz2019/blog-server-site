@@ -13,7 +13,7 @@ function allUsers(app) {
               await user.save();
               
             } else {
-              // If user does not exist, create a new user
+              // If user does not exist, create a new users
               user = new users({ email});
               await user.save();
             }
