@@ -15,8 +15,18 @@ const blogs = require('../Models/Blogs/Blog');
 // }
 // create blogs 
 function allBlogs(app) {
-     // search data 
-
+     app.get('/data', async (req, res) => {
+          const page = parseInt(req.query.page); // Get the page number from the request, default to 1
+          const limit = parseInt(req.query.limit); // Get the page size from the request, default to 10
+          const startIndex = (page - 1) * limit; // Calculate the start index of the page
+          try {
+            // Use the limit() and skip() methods to get the paginated data from the collection
+            const data = await blogs.find({status:"Available"}).skip(startIndex).limit(limit);
+            res.json(data); // Return the paginated data as a JSON response
+          } catch (err) {
+            res.status(500).send(err); // Handle any errors that occur during the data retrieval
+          }
+        });
 app.post("/createblog",async(req,res)=>{
      try {
        const CreateNewBlog=new blogs({
