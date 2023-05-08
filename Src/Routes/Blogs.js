@@ -27,6 +27,30 @@ function allBlogs(app) {
             res.status(500).send(err); // Handle any errors that occur during the data retrieval
           }
         });
+        app.get("/user/search/:search", async (req, res) => {
+          try {
+            const data = await blogs.find({
+              $or: [
+                {
+                    title: { $regex: req.params.search },
+                },
+                {
+                    keywords: { $regex: req.params.search },
+                },
+                {
+                    authorName: { $regex: req.params.search },
+                },
+                {
+                    description: { $regex: req.params.search },
+                },
+              ],
+            });
+        
+            res.status(200).json(data);
+          } catch (error) {
+            res.status(500).send(error.message);
+          }
+        });
 app.post("/createblog",async(req,res)=>{
      try {
        const CreateNewBlog=new blogs({

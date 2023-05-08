@@ -4,7 +4,7 @@ function usermessage(app) {
 app.post("/createusermessage",async(req,res)=>{
      try {
        const CreateNewContactInfo=new contactinfo({
-          userName:req.body.userName,
+         
           userEmail:req.body.userEmail,
           userComment:req.body.userComment,
        })
@@ -59,28 +59,6 @@ app.delete("/deletemessage/:id",async(req,res)=>{
      }
      } catch (error) {
           res.status(500).send({message:error.message}) 
-     }
-})
-// data update 
-app.put("/updatecontactinfo/:id",async(req,res)=>{
-     try {
-          const id=req.params.id;
-          const updatedMessage=await contactinfo.updateOne({_id:id},{
-               $set:{
-                    userName:req.body.userName,
-                    userEmail:req.body.userEmail,
-                    userComment:req.body.userComment,
-               }
-          }); 
-          if(updatedMessage){
-          res.status(200).send(updatedMessage)
-     }else{
-          res.status(404).send({
-               message:"Contact info is not updated"
-          })
-     }
-     } catch (error) {
-          res.status(500).send({message:error.message})
      }
 })
 }
