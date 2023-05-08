@@ -1,18 +1,4 @@
 const blogs = require('../Models/Blogs/Blog');
-// function verifyJWT(req,res,next){
-//   const authHeader=req.headers.authorization;
-// if(!authHeader){
-//      return res.status(401).send({message:"UnAuthorized access"})
-// }
-// const token=authHeader.split(' ')[1];
-// jwt.verify(token,'2ed56fb58b8672c3eb25d6d76fb638ef2e9d0037dcd18471d992b33302c5aee63070b1f7205e55b78102c28da8342cfdda2a5edcfe6385050933c9f3a8be3e85',function(error, decoded) {
-//      if(error){
-//        return res.status(403).send({message:'Forbidden access'})
-//      }
-//      req.decoded =decoded;
-//      next();
-// })
-// }
 // create blogs 
 function allBlogs(app) {
      app.get('/data', async (req, res) => {
@@ -25,6 +11,17 @@ function allBlogs(app) {
             res.json(data); // Return the paginated data as a JSON response
           } catch (err) {
             res.status(500).send(err); // Handle any errors that occur during the data retrieval
+          }
+        });
+        //data count
+       
+     app.get('/blogscount', async (req, res) => {
+          try {
+            const count = await blogs.countDocuments();
+            res.send({count});
+          } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
           }
         });
         app.get("/user/search/:search", async (req, res) => {
@@ -85,6 +82,31 @@ app.get("/readblogs",async(req,res)=>{
           res.status(500).send({message:error.message})
      }
 })
+app.get("/readblogswithwaiting",async(req,res)=>{
+     try {
+          const category="waiting";
+          const readBlogs=await blogs.find({status:category});
+          if(readBlogs){
+               res.status(200).send(readBlogs)
+          }else{
+               res.status(404).send({
+                    message:"Blogs is not found"
+               })
+          }
+     } catch (error) {
+          res.status(500).send({message:error.message})
+     }
+})
+app.get('/waitingblogscount', async (req, res) => {
+     try {
+          const category="waiting";
+       const count = await blogs.find({status:category}).countDocuments();
+       res.send({count});
+     } catch (err) {
+       console.error(err);
+       res.status(500).send('Server error');
+     }
+   });
   //   read blogs with category 
 app.get("/readblogswithcategory/:category",async(req,res)=>{
      try {

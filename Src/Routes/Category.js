@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const catagorys = require('../Models/category/category');
 // create blogs 
 function categorys(app) {
+     app.get('/categorycount', async (req, res) => {
+          try {
+            const count = await catagorys.countDocuments();
+            res.send({count});
+          } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+          }
+        });
 app.post("/createcategory",async(req,res)=>{
      try {
        const CreateNewCategory=new catagorys({

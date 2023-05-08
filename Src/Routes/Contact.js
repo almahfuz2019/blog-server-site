@@ -1,6 +1,15 @@
 const contactinfo = require('../Models/ContactUs/Contact');
 // create blogs 
 function usermessage(app) {
+     app.get('/contactcount', async (req, res) => {
+          try {
+            const count = await contactinfo.countDocuments();
+            res.send({count});
+          } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+          }
+        });
 app.post("/createusermessage",async(req,res)=>{
      try {
        const CreateNewContactInfo=new contactinfo({

@@ -2,6 +2,15 @@ const jwt = require("jsonwebtoken");
 const users = require("../Models/Users/Users");
 // create blogs
 function allUsers(app) {
+  app.get('/userscount', async (req, res) => {
+    try {
+      const count = await users.countDocuments();
+      res.send({count});
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  });
   app.post("/users", async (req, res) => {
     try {
       const { email } = req.body;
