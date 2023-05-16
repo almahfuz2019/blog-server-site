@@ -34,10 +34,24 @@ function allUsers(app) {
       );
       // Return the updated or created user
       res.status(200).json({ user, token });
-      console.log(user);
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
+    }
+  });
+  app.get("/users/search/:search", async (req, res) => {
+    try {
+      const data = await users.find({
+        $or: [
+          {
+            email:{$regex:req.params.search },
+          }
+        ]
+      });
+  
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).send(error.message);
     }
   });
   app.get("/getusers", async (req, res) => {

@@ -1,20 +1,18 @@
 const blogs = require('../Models/Blogs/Blog');
 // create blogs 
 function allBlogs(app) {
-     app.get('/data', async (req, res) => {
-          const page = parseInt(req.query.page); // Get the page number from the request, default to 1
-          const limit = parseInt(req.query.limit); // Get the page size from the request, default to 10
-          const startIndex = (page - 1) * limit; // Calculate the start index of the page
+     app.get('/blogs', async (req, res) => {
+          const page = parseInt(req.query.page);
+          const limit = parseInt(req.query.limit);
+          const startIndex = (page - 1) * limit;
           try {
-            // Use the limit() and skip() methods to get the paginated data from the collection
             const data = await blogs.find({status:"Available"}).skip(startIndex).limit(limit);
-            res.json(data); // Return the paginated data as a JSON response
+            res.json(data);
           } catch (err) {
-            res.status(500).send(err); // Handle any errors that occur during the data retrieval
+            res.status(500).send(err); 
           }
         });
         //data count
-       
      app.get('/blogscount', async (req, res) => {
           try {
             const count = await blogs.countDocuments();
@@ -40,7 +38,32 @@ function allBlogs(app) {
                 {
                     description: { $regex: req.params.search },
                 },
-              ],
+              ],status: "Available",
+            });
+        
+            res.status(200).json(data);
+          } catch (error) {
+            res.status(500).send(error.message);
+          }
+        });
+     //    for deshboard blogs page 
+     app.get("/blog/search/:search", async (req, res) => {
+          try {
+            const data = await blogs.find({
+              $or: [
+                {
+                    title: { $regex: req.params.search },
+                },
+                {
+                    keywords: { $regex: req.params.search },
+                },
+                {
+                    authorName: { $regex: req.params.search },
+                },
+                {
+                    description: { $regex: req.params.search },
+                },
+              ]
             });
         
             res.status(200).json(data);
@@ -82,6 +105,32 @@ app.get("/readblogs",async(req,res)=>{
           res.status(500).send({message:error.message})
      }
 })
+// waitingblog search 
+ //    for deshboard blogs page 
+ app.get("/waitingblog/search/:search", async (req, res) => {
+     try {
+       const data = await blogs.find({
+         $or: [
+           {
+               title: { $regex: req.params.search },
+           },
+           {
+               keywords: { $regex: req.params.search },
+           },
+           {
+               authorName: { $regex: req.params.search },
+           },
+           {
+               description: { $regex: req.params.search },
+           },
+         ],status: "waiting"
+       });
+   
+       res.status(200).json(data);
+     } catch (error) {
+       res.status(500).send(error.message);
+     }
+   });
 app.get("/readblogswithwaiting",async(req,res)=>{
      try {
           const category="waiting";
@@ -111,7 +160,7 @@ app.get('/waitingblogscount', async (req, res) => {
 app.get("/readblogswithcategory/:category",async(req,res)=>{
      try {
           const category=req.params.category;
-          const readBlogs=await blogs.find({category:category});
+          const readBlogs=await blogs.find({category:category,status: "Available",});
           if(readBlogs){
                res.status(200).send(readBlogs)
           }else{
@@ -139,28 +188,7 @@ app.get("/readblogswithcategory/:category",async(req,res)=>{
           res.status(500).send({message:error.message})
      }
 })
-// app.get("/readblogswithemail/:authorEmail",verifyJWT,async(req,res)=>{
-//      try {
-//           const findauthordata=req.params.authorEmail;
-//           const authorization=req.headers.authorization;
-//           const decodedEemail=req.decoded.email;
-//           if(findauthordata === decodedEemail){
 
-//                const readBlogs=await blogs.find({authorEmail:findauthordata});
-//                if(readBlogs){
-//                   return  res.status(200).send(readBlogs)
-//                }else{
-//                    return res.status(404).send({
-//                          message:"Blogs is not found"
-//                     })
-//                }
-//           }else{
-//                     return res.status(403).send({message:"Forbidden access"})
-//           }
-//      } catch (error) {
-//           res.status(500).send({message:error.message})
-//      }
-// })
 // find specific data 
 app.get("/readblog/:id",async(req,res)=>{
      try {
@@ -222,6 +250,4 @@ app.put("/updateblog/:id",async(req,res)=>{
      }
 })
 }
-
-
   module.exports = allBlogs;

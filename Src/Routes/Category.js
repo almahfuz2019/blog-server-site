@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const catagorys = require('../Models/category/category');
 // create blogs 
 function categorys(app) {

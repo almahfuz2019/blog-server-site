@@ -30,7 +30,28 @@ app.get("/readcomments",async(req,res)=>{
           res.status(500).send({message:error.message})
      }
 })
-
+// search 
+app.get("/usercomment/search/:search", async (req, res) => {
+     try {
+       const data = await comments.find({
+         $or: [
+           {
+               userEmail:{$regex:req.params.search },
+           },
+           {
+               userName:{$regex:req.params.search },
+           },
+           {
+               userComment:{$regex:req.params.search },
+           }
+         ]
+       });
+   
+       res.status(200).json(data);
+     } catch (error) {
+       res.status(500).send(error.message);
+     }
+   });
 // find specific data 
 app.get("/readcomment/:id",async(req,res)=>{
      try {
