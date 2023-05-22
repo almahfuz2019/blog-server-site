@@ -226,7 +226,6 @@ app.put("/updateblog/:id",async(req,res)=>{
      try {
           const {title, image, authorName, authorEmail, status, date, keywords, description } = req.body;
           const updateObj = {}
-
           if (title) updateObj.title = title;
           if (image) updateObj.image = image;
           if (authorName) updateObj.authorName = authorName;
