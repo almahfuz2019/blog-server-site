@@ -224,24 +224,34 @@ app.delete("/deleteblog/:id",async(req,res)=>{
 // data update 
 app.put("/updateblog/:id",async(req,res)=>{
      try {
-          const {title, image, authorName, authorEmail, status, date, keywords, description } = req.body;
-          const updateObj = {}
-          if (title) updateObj.title = title;
-          if (image) updateObj.image = image;
-          if (authorName) updateObj.authorName = authorName;
-          if (authorEmail) updateObj.authorEmail = authorEmail;
-          if (status) updateObj.status = status;
-          if (date) updateObj.date = date;
-          if (keywords) updateObj.keywords = keywords;
-          if (description) updateObj.description = description;
+          // const {title, image, authorName, authorEmail, status, date, keywords, description } = req.body;
+          // const updateObj = {}
+          // if (title) updateObj.title = title;
+          // if (image) updateObj.image = image;
+          // if (authorName) updateObj.authorName = authorName;
+          // if (authorEmail) updateObj.authorEmail = authorEmail;
+          // if (status) updateObj.status = status;
+          // if (date) updateObj.date = date;
+          // if (keywords) updateObj.keywords = keywords;
+          // if (description) updateObj.description = description;
 
           const id=req.params.id;
-          const updatedBlog=await blogs.updateOne({_id:id}, updateObj, {new: true}); 
+          const updatedBlog=await blogs.updateOne({_id:id},{
+               $set:{
+                    title:req.body.title,
+                    image:req.body.image,
+                    authorName:req.body.authorName,
+                    authorEmail:req.body.authorEmail,
+                    status:req.body.status,
+                    keywords:req.body.keywords,
+                    description:req.body.description,
+               }
+          }); 
           if(updatedBlog){
           res.status(200).send(updatedBlog)
      }else{
           res.status(404).send({
-               message:"Category is not updated"
+               message:"Blog is not updated"
           })
      }
      } catch (error) {
