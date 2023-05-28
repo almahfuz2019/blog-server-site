@@ -84,7 +84,7 @@ function allBlogs(app) {
         authorName: req.body.authorName,
         authorEmail: req.body.authorEmail,
         status: req.body.status,
-        date: req.body.date,
+        date: req.body.addblogdate,
         keywords: req.body.keywords,
         description: req.body.description,
         category: req.body.category,
