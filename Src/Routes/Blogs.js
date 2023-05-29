@@ -26,6 +26,18 @@ function allBlogs(app) {
       res.status(500).send("Server error");
     }
   });
+  //data count
+  app.get("/blogscountwithavailable", async (req, res) => {
+    try {
+      const category = "Available";
+      const count = await blogs.find({ status: category }).countDocuments();
+      res.send({ count });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error");
+    }
+  });
+ 
   app.get("/user/search/:search", async (req, res) => {
     try {
       const data = await blogs.find({
@@ -98,7 +110,9 @@ function allBlogs(app) {
   //   read blogs
   app.get("/readblogs", async (req, res) => {
     try {
-      const readBlogs = await blogs.find();
+      const availablestatus = "Available";
+      const readBlogs = await blogs.find({ status:availablestatus
+    });
       if (readBlogs) {
         res.status(200).send(readBlogs);
       } else {
