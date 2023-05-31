@@ -91,6 +91,7 @@ function allBlogs(app) {
   app.post("/createblog", async (req, res) => {
     try {
       const CreateNewBlog = new blogs({
+        // ...req.body,
         title: req.body.title,
         image: req.body.image,
         authorName: req.body.authorName,
@@ -199,7 +200,7 @@ function allBlogs(app) {
   app.get("/readblogswithemail/:authorEmail", async (req, res) => {
     try {
       const findauthordata = req.params.authorEmail;
-      const readBlogs = await blogs.find({ authorEmail: findauthordata });
+      const readBlogs = await blogs.find({authorEmail: findauthordata});
       if (readBlogs) {
         res.status(200).send(readBlogs);
       } else {
