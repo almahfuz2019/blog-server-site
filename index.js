@@ -6,7 +6,7 @@ app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 const port = 5000;
-async function database() {
+async function database(){
      try {
           // await mongoose.connect('mongodb://127.0.0.1:27017/Blogwebsite');
           // await mongoose.connect('http://blogs:UrayO3uDOh6xrTQp@cluster0.lr3ecmt.mongodb.net/blogs');

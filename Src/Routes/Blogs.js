@@ -125,6 +125,22 @@ function allBlogs(app) {
       res.status(500).send({ message: error.message });
     }
   });
+  app.get("/readblogswithlimit", async (req, res) => {
+    try {
+      const availablestatus = "Available";
+      const readBlogs = await blogs.find({ status:availablestatus
+    }).limit(4);
+      if (readBlogs) {
+        res.status(200).send(readBlogs);
+      } else {
+        res.status(404).send({
+          message: "Blogs is not found",
+        });
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  });
   // waitingblog search
   //    for deshboard blogs page
   app.get("/waitingblog/search/:search", async (req, res) => {
